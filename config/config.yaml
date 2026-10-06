@@ -1,0 +1,17 @@
+# Runtime parameters — loaded by AgentRegistry, passed as Graph(config=...).
+# Separate from config/agent.yaml (the static manifest).
+
+max_retry: 3
+timeout_s: 30
+# v1 is deterministic: rule-based OCR field extraction that does NOT invoke an
+# LLM (there is no llm_client in SDK v1). The llm.* block below is a declared-
+# but-inactive contract — the outer GraphNode forwards it into the inner
+# DomainWorkflowGraph via _parent_config() (exposed under `configurable`),
+# reserved for a future LLM-backed revision. No prompt template is loaded in
+# v1; prompts/document_extraction.j2 is inert by design (SR #12 Medium).
+llm:
+  system_prompt_template: "prompts/document_extraction.j2"
+  temperature: 0.0
+  max_tokens: 4000
+security:
+  s3_gate_enabled: true
